@@ -11,7 +11,9 @@ class KittensController < ApplicationController
     @kitten = Kitten.new
   end
 
-  def edit; end
+  def edit
+    @kitten = Kitten.find(params[:id])
+  end
 
   def create
     @kitten = Kitten.new(kitten_params)
@@ -26,9 +28,11 @@ class KittensController < ApplicationController
   end
 
   def update
+    @kitten = Kitten.find(params[:id])
+
     respond_to do |format|
       if @kitten.update(kitten_params)
-        format.html { redirect_to @kitten, notice: 'Kitten was successfully updated.' }
+        format.html { redirect_to kitten_path, notice: 'Kitten was successfully updated.' }
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
@@ -36,10 +40,10 @@ class KittensController < ApplicationController
   end
 
   def destroy
-    @kitten.destroy
-    respond_to do |format|
-      format.html { redirect_to kittens_url, notice: 'Kitten was successfully destroyed.' }
-    end
+    kitten = Kitten.find(params[:id])
+    kitten.destroy
+
+    redirect_to root_path, notice: "Kitten deleted, how could you do that ;("
   end
 
   private
